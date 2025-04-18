@@ -47,6 +47,24 @@
       width: 30%;
     }
 
+    .stake-selector {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .stake-selector input, .stake-selector button {
+      margin: 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .stake-selector input[type="number"] {
+      width: 80px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -75,10 +93,19 @@
     <h2>📊 Performance Tracker</h2>
 
     <div class="card">
+
+      <div class="stake-selector">
+        <label><strong>Select Stake:</strong></label><br/>
+        <button onclick="updateTable(1)">£1</button>
+        <button onclick="updateTable(5)">£5</button>
+        <button onclick="updateTable(10)">£10</button>
+        <input type="number" id="customStake" placeholder="Custom £" onchange="updateTable(this.value)">
+      </div>
+
       <div class="stats-summary">
         <div>
           <strong>Total Picks:</strong><br/>
-          15
+          5
         </div>
         <div>
           <strong>Strike Rate:</strong><br/>
@@ -98,60 +125,56 @@
             <th>Pick</th>
             <th>Result</th>
             <th>SP</th>
-            <th>Bet Outcome (£5 Stake)</th>
+            <th>Return (Stake)</th>
             <th>Running Total</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Apr 15</td>
-            <td>Football</td>
-            <td>Arsenal -1.5</td>
-            <td>✅ Win</td>
-            <td>2.10</td>
-            <td>£10.50 (+£5.50)</td>
-            <td>+£5.50</td>
-          </tr>
-          <tr>
-            <td>Apr 15</td>
-            <td>Horses</td>
-            <td>Midnight Flyer (EW)</td>
-            <td>❌ Lost</td>
-            <td>7.00</td>
-            <td>£0.00 (-£5.00)</td>
-            <td>+£0.50</td>
-          </tr>
-          <tr>
-            <td>Apr 15</td>
-            <td>Greyhounds</td>
-            <td>Trap 4 – Jet Boy</td>
-            <td>✅ Win</td>
-            <td>3.50</td>
-            <td>£17.50 (+£12.50)</td>
-            <td>+£13.00</td>
-          </tr>
-          <tr>
-            <td>Apr 15</td>
-            <td>Golf</td>
-            <td>Top 20 – Spieth</td>
-            <td>✅ Win</td>
-            <td>2.75</td>
-            <td>£13.75 (+£8.75)</td>
-            <td>+£21.75</td>
-          </tr>
-          <tr>
-            <td>Apr 15</td>
-            <td>Darts</td>
-            <td>MVG 6-4</td>
-            <td>❌ Lost</td>
-            <td>4.50</td>
-            <td>£0.00 (-£5.00)</td>
-            <td>+£16.75</td>
-          </tr>
+        <tbody id="resultsTable">
+          <!-- Rows will be populated by JavaScript -->
         </tbody>
       </table>
     </div>
   </section>
+
+  <script>
+    const data = [
+      { date: 'Apr 15', sport: 'Football', pick: 'Arsenal -1.5', result: '✅ Win', sp: 2.10, won: true },
+      { date: 'Apr 15', sport: 'Horses', pick: 'Midnight Flyer (EW)', result: '❌ Lost', sp: 7.00, won: false },
+      { date: 'Apr 15', sport: 'Greyhounds', pick: 'Trap 4 – Jet Boy', result: '✅ Win', sp: 3.50, won: true },
+      { date: 'Apr 15', sport: 'Golf', pick: 'Top 20 – Spieth', result: '✅ Win', sp: 2.75, won: true },
+      { date: 'Apr 15', sport: 'Darts', pick: 'MVG 6-4', result: '❌ Lost', sp: 4.50, won: false }
+    ];
+
+    function updateTable(stake) {
+      stake = parseFloat(stake);
+      if (isNaN(stake) || stake <= 0) return;
+
+      const tableBody = document.getElementById("resultsTable");
+      tableBody.innerHTML = "";
+
+      let runningTotal = 0;
+
+      data.forEach(row => {
+        let returnVal = row.won ? stake * row.sp : 0;
+        let profitLoss = returnVal - stake;
+        runningTotal += profitLoss;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${row.date}</td>
+          <td>${row.sport}</td>
+          <td>${row.pick}</td>
+          <td>${row.result}</td>
+          <td>${row.sp.toFixed(2)}</td>
+          <td>£${returnVal.toFixed(2)} (${profitLoss >= 0 ? "+" : "-"}£${Math.abs(profitLoss).toFixed(2)})</td>
+          <td>£${runningTotal >= 0 ? "+" : "-"}£${Math.abs(runningTotal).toFixed(2)}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    window.onload = () => updateTable(5); // default £5 stake on load
+  </script>
 
 </body>
 </html>
