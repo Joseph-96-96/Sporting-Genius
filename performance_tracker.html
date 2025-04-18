@@ -179,17 +179,23 @@
   function filterByInputs() {
     const stake = currentStake;
     const sportFilter = document.getElementById("sportFilter").value;
-    const startDate = document.getElementById("startDate").value;
-    const endDate = document.getElementById("endDate").value;
+    const startDateInput = document.getElementById("startDate").value;
+    const endDateInput = document.getElementById("endDate").value;
+
+    const startDate = startDateInput ? new Date(startDateInput) : null;
+    const endDate = endDateInput ? new Date(endDateInput) : null;
+
     const tableBody = document.getElementById("resultsTable");
     tableBody.innerHTML = "";
 
     let runningTotal = 0;
 
     data.forEach(row => {
+      const rowDate = new Date(row.date);
+
       if ((sportFilter !== "All" && row.sport !== sportFilter)) return;
-      if (startDate && new Date(row.date) < new Date(startDate)) return;
-      if (endDate && new Date(row.date) > new Date(endDate)) return;
+      if (startDate && rowDate < startDate) return;
+      if (endDate && rowDate > endDate) return;
 
       let returnVal = row.won ? stake * row.sp : 0;
       let profitLoss = returnVal - stake;
