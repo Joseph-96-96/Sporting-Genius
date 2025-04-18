@@ -102,7 +102,7 @@
       <input type="number" id="customStake" placeholder="Custom £" onchange="updateTable(this.value)"><br/>
 
       <label><strong>Sport:</strong></label>
-      <select id="sportFilter" onchange="updateTable(currentStake)">
+      <select id="sportFilter">
         <option value="All">All</option>
         <option value="Football">Football</option>
         <option value="Horses">Horses</option>
@@ -112,9 +112,10 @@
       </select>
 
       <label><strong>From:</strong></label>
-      <input type="date" id="startDate" onchange="updateTable(currentStake)">
+      <input type="date" id="startDate">
       <label><strong>To:</strong></label>
-      <input type="date" id="endDate" onchange="updateTable(currentStake)">
+      <input type="date" id="endDate">
+      <button onclick="filterByInputs()">Search</button>
       <button onclick="clearDates()">Clear Dates</button>
     </div>
 
@@ -167,7 +168,7 @@
   function clearDates() {
     document.getElementById("startDate").value = "";
     document.getElementById("endDate").value = "";
-    updateTable(currentStake);
+    filterByInputs();
   }
 
   function formatDateUK(isoDate) {
@@ -175,11 +176,8 @@
     return `${day}-${month}-${year}`;
   }
 
-  function updateTable(stake) {
-    stake = parseFloat(stake);
-    if (isNaN(stake) || stake <= 0) return;
-    currentStake = stake;
-
+  function filterByInputs() {
+    const stake = currentStake;
     const sportFilter = document.getElementById("sportFilter").value;
     const startDate = document.getElementById("startDate").value;
     const endDate = document.getElementById("endDate").value;
@@ -209,6 +207,12 @@
       `;
       tableBody.appendChild(tr);
     });
+  }
+
+  function updateTable(stake) {
+    currentStake = parseFloat(stake);
+    if (isNaN(currentStake) || currentStake <= 0) return;
+    filterByInputs();
   }
 
   window.onload = () => updateTable(currentStake);
