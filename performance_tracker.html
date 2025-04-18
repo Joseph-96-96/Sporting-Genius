@@ -61,8 +61,8 @@
       cursor: pointer;
     }
 
-    .controls input[type="number"] {
-      width: 80px;
+    .controls input[type="number"], .controls input[type="date"] {
+      width: 140px;
     }
 
     table {
@@ -89,117 +89,130 @@
 </head>
 <body>
 
-  <section class="section">
-    <h2>📊 Performance Tracker</h2>
+<section class="section">
+  <h2>📊 Performance Tracker</h2>
 
-    <div class="card">
+  <div class="card">
 
-      <div class="controls">
-        <label><strong>Stake:</strong></label><br/>
-        <button onclick="updateTable(1)">£1</button>
-        <button onclick="updateTable(5)">£5</button>
-        <button onclick="updateTable(10)">£10</button>
-        <input type="number" id="customStake" placeholder="Custom £" onchange="updateTable(this.value)"><br/>
+    <div class="controls">
+      <label><strong>Stake:</strong></label><br/>
+      <button onclick="updateTable(1)">£1</button>
+      <button onclick="updateTable(5)">£5</button>
+      <button onclick="updateTable(10)">£10</button>
+      <input type="number" id="customStake" placeholder="Custom £" onchange="updateTable(this.value)"><br/>
 
-        <label><strong>Sport:</strong></label>
-        <select id="sportFilter" onchange="updateTable(currentStake)">
-          <option value="All">All</option>
-          <option value="Football">Football</option>
-          <option value="Horses">Horses</option>
-          <option value="Greyhounds">Greyhounds</option>
-          <option value="Golf">Golf</option>
-          <option value="Darts">Darts</option>
-        </select>
+      <label><strong>Sport:</strong></label>
+      <select id="sportFilter" onchange="updateTable(currentStake)">
+        <option value="All">All</option>
+        <option value="Football">Football</option>
+        <option value="Horses">Horses</option>
+        <option value="Greyhounds">Greyhounds</option>
+        <option value="Golf">Golf</option>
+        <option value="Darts">Darts</option>
+      </select>
 
-        <label><strong>From:</strong></label>
-        <input type="date" id="startDate" onchange="updateTable(currentStake)">
-        <label><strong>To:</strong></label>
-        <input type="date" id="endDate" onchange="updateTable(currentStake)">
-      </div>
-
-      <div class="stats-summary">
-        <div>
-          <strong>Total Picks:</strong><br/>
-          5
-        </div>
-        <div>
-          <strong>Strike Rate:</strong><br/>
-          60%
-        </div>
-        <div>
-          <strong>ROI:</strong><br/>
-          +23.5%
-        </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Sport</th>
-            <th>Pick</th>
-            <th>Result</th>
-            <th>SP</th>
-            <th>Return (Stake)</th>
-            <th>Running Total</th>
-          </tr>
-        </thead>
-        <tbody id="resultsTable">
-          <!-- Populated dynamically -->
-        </tbody>
-      </table>
+      <label><strong>From:</strong></label>
+      <input type="date" id="startDate" onchange="updateTable(currentStake)">
+      <label><strong>To:</strong></label>
+      <input type="date" id="endDate" onchange="updateTable(currentStake)">
+      <button onclick="clearDates()">Clear Dates</button>
     </div>
-  </section>
 
-  <script>
-    const data = [
-      { date: '2024-04-15', sport: 'Football', pick: 'Arsenal -1.5', result: '✅ Win', sp: 2.10, won: true },
-      { date: '2024-04-15', sport: 'Horses', pick: 'Midnight Flyer (EW)', result: '❌ Lost', sp: 7.00, won: false },
-      { date: '2024-04-16', sport: 'Greyhounds', pick: 'Trap 4 – Jet Boy', result: '✅ Win', sp: 3.50, won: true },
-      { date: '2024-04-17', sport: 'Golf', pick: 'Top 20 – Spieth', result: '✅ Win', sp: 2.75, won: true },
-      { date: '2024-04-18', sport: 'Darts', pick: 'MVG 6-4', result: '❌ Lost', sp: 4.50, won: false }
-    ];
+    <div class="stats-summary">
+      <div>
+        <strong>Total Picks:</strong><br/>
+        5
+      </div>
+      <div>
+        <strong>Strike Rate:</strong><br/>
+        60%
+      </div>
+      <div>
+        <strong>ROI:</strong><br/>
+        +23.5%
+      </div>
+    </div>
 
-    let currentStake = 5;
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Sport</th>
+          <th>Pick</th>
+          <th>Result</th>
+          <th>SP</th>
+          <th>Return (Stake)</th>
+          <th>Running Total</th>
+        </tr>
+      </thead>
+      <tbody id="resultsTable">
+        <!-- Table data will be inserted here -->
+      </tbody>
+    </table>
 
-    function updateTable(stake) {
-      stake = parseFloat(stake);
-      if (isNaN(stake) || stake <= 0) return;
-      currentStake = stake;
+  </div>
+</section>
 
-      const sportFilter = document.getElementById("sportFilter").value;
-      const startDate = document.getElementById("startDate").value;
-      const endDate = document.getElementById("endDate").value;
-      const tableBody = document.getElementById("resultsTable");
-      tableBody.innerHTML = "";
+<script>
+  const data = [
+    { date: '2024-04-15', sport: 'Football', pick: 'Arsenal -1.5', result: '✅ Win', sp: 2.10, won: true },
+    { date: '2024-04-15', sport: 'Horses', pick: 'Midnight Flyer (EW)', result: '❌ Lost', sp: 7.00, won: false },
+    { date: '2024-04-16', sport: 'Greyhounds', pick: 'Trap 4 – Jet Boy', result: '✅ Win', sp: 3.50, won: true },
+    { date: '2024-04-17', sport: 'Golf', pick: 'Top 20 – Spieth', result: '✅ Win', sp: 2.75, won: true },
+    { date: '2024-04-18', sport: 'Darts', pick: 'MVG 6-4', result: '❌ Lost', sp: 4.50, won: false }
+  ];
 
-      let runningTotal = 0;
+  let currentStake = 5;
 
-      data.forEach(row => {
-        if ((sportFilter !== "All" && row.sport !== sportFilter)) return;
-        if (startDate && new Date(row.date) < new Date(startDate)) return;
-        if (endDate && new Date(row.date) > new Date(endDate)) return;
+  function clearDates() {
+    document.getElementById("startDate").value = "";
+    document.getElementById("endDate").value = "";
+    updateTable(currentStake);
+  }
 
-        let returnVal = row.won ? stake * row.sp : 0;
-        let profitLoss = returnVal - stake;
-        runningTotal += profitLoss;
+  function formatDateUK(isoDate) {
+    const [year, month, day] = isoDate.split("-");
+    return `${day}-${month}-${year}`;
+  }
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${row.date}</td>
-          <td>${row.sport}</td>
-          <td>${row.pick}</td>
-          <td>${row.result}</td>
-          <td>${row.sp.toFixed(2)}</td>
-          <td>£${returnVal.toFixed(2)} (${profitLoss >= 0 ? "+" : "-"}£${Math.abs(profitLoss).toFixed(2)})</td>
-          <td>${runningTotal >= 0 ? "+" : "-"}£${Math.abs(runningTotal).toFixed(2)}</td>
-        `;
-        tableBody.appendChild(tr);
-      });
-    }
+  function updateTable(stake) {
+    stake = parseFloat(stake);
+    if (isNaN(stake) || stake <= 0) return;
+    currentStake = stake;
 
-    window.onload = () => updateTable(currentStake);
-  </script>
+    const sportFilter = document.getElementById("sportFilter").value;
+    const startDate = document.getElementById("startDate").value;
+    const endDate = document.getElementById("endDate").value;
+    const tableBody = document.getElementById("resultsTable");
+    tableBody.innerHTML = "";
+
+    let runningTotal = 0;
+
+    data.forEach(row => {
+      if ((sportFilter !== "All" && row.sport !== sportFilter)) return;
+      if (startDate && new Date(row.date) < new Date(startDate)) return;
+      if (endDate && new Date(row.date) > new Date(endDate)) return;
+
+      let returnVal = row.won ? stake * row.sp : 0;
+      let profitLoss = returnVal - stake;
+      runningTotal += profitLoss;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${formatDateUK(row.date)}</td>
+        <td>${row.sport}</td>
+        <td>${row.pick}</td>
+        <td>${row.result}</td>
+        <td>${row.sp.toFixed(2)}</td>
+        <td>£${returnVal.toFixed(2)} (${profitLoss >= 0 ? "+" : "-"}£${Math.abs(profitLoss).toFixed(2)})</td>
+        <td>${runningTotal >= 0 ? "+" : "-"}£${Math.abs(runningTotal).toFixed(2)}</td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  }
+
+  window.onload = () => updateTable(currentStake);
+</script>
 
 </body>
 </html>
