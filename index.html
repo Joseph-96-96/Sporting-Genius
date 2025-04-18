@@ -57,6 +57,23 @@
       padding: 20px;
       margin-bottom: 20px;
     }
+    .filter-buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .filter-buttons button {
+      background-color: #FFD700;
+      color: #0B1E33;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+    .filter-buttons button:hover {
+      background-color: #e6c200;
+    }
     footer {
       text-align: center;
       padding: 30px 20px;
@@ -68,59 +85,86 @@
 </head>
 <body>
 
-  <header>
-    <img src="logo.png" alt="Sporting Genius Logo" />
-  </header>
+<header>
+  <img src="logo.png" alt="Sporting Genius Logo" />
+</header>
 
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Today's Picks</a>
-    <a href="performance_tracker.html">Stats Tracker</a>
-    <a href="#">About</a>
-    <a href="#">Login</a>
-  </nav>
+<nav>
+  <a href="#">Home</a>
+  <a href="#">Today's Picks</a>
+  <a href="performance_tracker.html">Stats Tracker</a>
+  <a href="#">About</a>
+  <a href="#">Login</a>
+</nav>
 
-  <div class="hero">
-    <h1>Smarter Bets. Better Results.</h1>
-    <p>Daily predictions across football, greyhounds, horses, golf and darts.</p>
+<div class="hero">
+  <h1>Smarter Bets. Better Results.</h1>
+  <p>Daily predictions across football, greyhounds, horses, golf and darts.</p>
+</div>
+
+<section class="section">
+  <h2>🏆 Featured Pick of the Day</h2>
+  <div class="card">
+    <strong>Horse Racing:</strong> Newbury 3:35 PM – <strong>Golden Whisper</strong><br/>
+    <em>3 wins from last 4, strong finish LTO, well suited to soft ground, positive market support.</em>
+  </div>
+</section>
+
+<section class="section">
+  <h2>🔥 Today's Predictions</h2>
+
+  <div class="filter-buttons">
+    <button onclick="filterCards('all')">All</button>
+    <button onclick="filterCards('football')">Football</button>
+    <button onclick="filterCards('horses')">Horse Racing</button>
+    <button onclick="filterCards('greyhounds')">Greyhound Racing</button>
+    <button onclick="filterCards('golf')">Golf</button>
+    <button onclick="filterCards('darts')">Darts</button>
   </div>
 
-  <section class="section">
-    <h2>🏆 Featured Pick of the Day</h2>
-    <div class="card">
-      <strong>Horse Racing:</strong> Newbury 3:35 PM – <strong>Golden Whisper</strong><br/>
-      <em>3 wins from last 4, strong finish LTO, well suited to soft ground, positive market support.</em>
-    </div>
-  </section>
+  <div class="card sport football">
+    <p><strong>⚽ Football:</strong> Chelsea vs Everton – <strong>Chelsea to Win & Over 2.5 Goals</strong><br/>
+    <em>Chelsea scoring freely at home; Everton struggling with injuries and defending set pieces.</em></p>
+  </div>
 
-  <section class="section">
-    <h2>🔥 Today's Predictions</h2>
+  <div class="card sport horses">
+    <p><strong>🐎 Horse Racing:</strong> Newbury 3:35 PM – <strong>Golden Whisper</strong><br/>
+    <em>Strong form, class edge, and favorable conditions today.</em></p>
+  </div>
 
-    <div class="card">
-      <p><strong>Football:</strong> Chelsea vs Everton – <strong>Chelsea to Win & Over 2.5 Goals</strong><br/>
-      <em>Chelsea scoring freely at home; Everton struggling with injuries and defending set pieces.</em></p>
-    </div>
-    <div class="card">
-      <p><strong>Horse Racing:</strong> Newbury 3:35 PM – <strong>Golden Whisper</strong><br/>
-      <em>Strong form, class edge, and favorable conditions today.</em></p>
-    </div>
-    <div class="card">
-      <p><strong>Greyhound Racing:</strong> Monmore 19:42 – <strong>Trap 3 – Swift Arrow</strong><br/>
-      <em>Fastest average split time, early pace dominant from this draw.</em></p>
-    </div>
-    <div class="card">
-      <p><strong>Golf:</strong> PGA – Zurich Classic – <strong>Top 20 – Max Homa</strong><br/>
-      <em>Excellent recent approach stats and solid course record.</em></p>
-    </div>
-    <div class="card">
-      <p><strong>Darts:</strong> Premier League – Night 11 – <strong>Luke Humphries to win 6–4</strong><br/>
-      <em>Higher checkout rate and 3-1 H2H lead over opponent in recent meetings.</em></p>
-    </div>
-  </section>
+  <div class="card sport greyhounds">
+    <p><strong>🐕 Greyhound Racing:</strong> Monmore 19:42 – <strong>Trap 3 – Swift Arrow</strong><br/>
+    <em>Fastest average split time, early pace dominant from this draw.</em></p>
+  </div>
 
-  <footer>
-    &copy; 2025 Sporting Genius. All rights reserved. | Powered by Smart Picks.
-  </footer>
+  <div class="card sport golf">
+    <p><strong>⛳ Golf:</strong> PGA – Zurich Classic – <strong>Top 20 – Max Homa</strong><br/>
+    <em>Excellent recent approach stats and solid course record.</em></p>
+  </div>
+
+  <div class="card sport darts">
+    <p><strong>🎯 Darts:</strong> Premier League – Night 11 – <strong>Luke Humphries to win 6–4</strong><br/>
+    <em>Higher checkout rate and 3-1 H2H lead over opponent in recent meetings.</em></p>
+  </div>
+
+</section>
+
+<footer>
+  &copy; 2025 Sporting Genius. All rights reserved. | Powered by Smart Picks.
+</footer>
+
+<script>
+  function filterCards(sport) {
+    const cards = document.querySelectorAll('.card.sport');
+    cards.forEach(card => {
+      if (sport === 'all' || card.classList.contains(sport)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
